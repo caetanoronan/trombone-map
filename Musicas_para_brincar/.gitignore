@@ -1,0 +1,28 @@
+# Arquivos de áudio (não versionamos música)
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.flac
+
+# Dependências (se usar Node no futuro)
+node_modules/
+package-lock.json
+yarn.lock
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Arquivos do sistema
+Thumbs.db
+.DS_Store
+
+# Builds e artifacts (se usar)
+dist/
+build/
+*.zip

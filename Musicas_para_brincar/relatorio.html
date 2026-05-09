@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Relatório do Mapa Base do Trombone</title>
+  <style>
+    :root {
+      --bg: #e5f5f9;
+      --bg-2: #f7fcfd;
+      --card: rgba(255, 255, 255, 0.94);
+      --surface-1: rgba(255, 255, 255, 0.9);
+      --surface-2: rgba(255, 255, 255, 0.82);
+      --ink: #17313a;
+      --muted: #4b6770;
+      --accent: #2ca25f;
+      --accent-2: #5abfa6;
+      --accent-3: #117a65;
+      --line: rgba(23, 49, 58, 0.14);
+      --shadow: 0 18px 50px rgba(23, 49, 58, 0.10);
+      --radius: 24px;
+      --focus-ring: rgba(44, 162, 95, 0.42);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0d1720;
+      --bg-2: #121f2b;
+      --card: rgba(19, 31, 43, 0.92);
+      --surface-1: rgba(25, 39, 54, 0.92);
+      --surface-2: rgba(21, 34, 47, 0.86);
+      --ink: #e8f3f8;
+      --muted: #b7c8d3;
+      --accent: #38c777;
+      --accent-2: #62d1b8;
+      --accent-3: #31b28d;
+      --line: rgba(203, 227, 240, 0.20);
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      --focus-ring: rgba(98, 209, 184, 0.55);
+    }
+
+    html[data-contrast="high"] {
+      --bg: #ffffff;
+      --bg-2: #f3f4f6;
+      --card: #ffffff;
+      --surface-1: #ffffff;
+      --surface-2: #ffffff;
+      --ink: #0b0f14;
+      --muted: #1f2937;
+      --line: rgba(11, 15, 20, 0.52);
+      --shadow: none;
+      --focus-ring: #0b0f14;
+    }
+
+    html[data-theme="dark"][data-contrast="high"] {
+      --bg: #060a0f;
+      --bg-2: #0b1118;
+      --card: #0d1720;
+      --surface-1: #111d28;
+      --surface-2: #111d28;
+      --ink: #f8fafc;
+      --muted: #e2e8f0;
+      --line: rgba(248, 250, 252, 0.5);
+      --shadow: none;
+      --focus-ring: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI Variable", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(44, 162, 95, 0.20), transparent 28%),
+        radial-gradient(circle at top right, rgba(90, 191, 166, 0.18), transparent 24%),
+        radial-gradient(circle at 72% 84%, rgba(17, 122, 101, 0.14), transparent 28%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      min-height: 100vh;
+    }
+
+    .shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .theme-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .theme-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      font-size: 0.84rem;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .theme-control select {
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--surface-1);
+      color: var(--ink);
+      padding: 6px 8px;
+      font: inherit;
+    }
+
+    .pill,
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(31, 41, 51, 0.08);
+    }
+
+    a:focus-visible,
+    select:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+        animation: rise 460ms ease both;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -110px -120px auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(44, 162, 95, 0.16), transparent 65%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 0.88rem;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.05;
+      max-width: 14ch;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 70ch;
+      color: var(--muted);
+      font-size: 1.04rem;
+      line-height: 1.65;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        animation: rise 520ms ease both;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 54px rgba(23, 49, 58, 0.14);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.35rem;
+    }
+
+    .card p.sub {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .item {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: var(--surface-1);
+      line-height: 1.55;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .item::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 4px;
+        background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    }
+
+    .item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .item span {
+      color: var(--muted);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      color: var(--accent-3);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: var(--surface-1);
+    }
+
+    .badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .step span {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list .row {
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--surface-1);
+      line-height: 1.5;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .row::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 4px;
+        background: linear-gradient(180deg, var(--accent-3), var(--accent));
+    }
+
+    .footer-note {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hero,
+        .card {
+          animation: none;
+        }
+        .card {
+          transition: none;
+        }
+      }
+
+    @media (max-width: 980px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 14px;
+      }
+
+      .hero,
+      .card {
+        padding: 18px;
+      }
+
+      .topbar {
+        justify-content: flex-start;
+      }
+
+      .theme-controls {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 1fr;
+      }
+
+      .theme-control {
+        width: 100%;
+      }
+
+      .actions,
+      .nav-link {
+        width: 100%;
+      }
+
+      .step {
+        grid-template-columns: 1fr;
+      }
+
+      .badge {
+        width: 36px;
+        height: 36px;
+      }
+
+      h1 {
+        font-size: clamp(1.75rem, 8vw, 2.5rem);
+      }
+    }
+
+    /* Abas e navegação */
+    .tabs {
+      display: flex;
+      gap: 12px;
+      border-bottom: 2px solid var(--line);
+      margin-bottom: 32px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tab-button {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-button:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent-2);
+    }
+
+    .tab-button.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Vara do trombone */
+    .trombone-slider {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+      margin: 32px 0;
+    }
+
+    .trombone-visual {
+      background: linear-gradient(135deg, var(--surface-1) 0%, var(--surface-2) 100%);
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      min-width: 280px;
+    }
+
+    .trombone-visual svg {
+      width: 100%;
+      height: auto;
+      max-width: 260px;
+    }
+
+    .scale-card {
+      background: var(--surface-1);
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .scale-card h3 {
+      margin: 0 0 12px 0;
+      color: var(--accent);
+      font-size: 18px;
+    }
+
+    .scale-notes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .note-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(44, 162, 95, 0.1);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    .position-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .position-table thead {
+      background: rgba(44, 162, 95, 0.08);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .position-table th,
+    .position-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .position-table tr:hover {
+      background: rgba(44, 162, 95, 0.05);
+    }
+
+    @media (max-width: 768px) {
+      .trombone-slider {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        gap: 8px;
+      }
+
+      .tab-button {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topbar">
+      <a class="nav-link" href="index.html">Voltar ao mapa-base</a>
+      <span class="pill">Relatório de concepção</span>
+      <div class="theme-controls" aria-label="Controles de tema e contraste">
+        <label class="theme-control" for="themeSelect">
+          <span>Tema</span>
+          <select id="themeSelect" aria-label="Escolher tema visual">
+            <option value="light">Claro</option>
+            <option value="dark">Escuro</option>
+          </select>
+        </label>
+        <label class="theme-control" for="contrastToggle">
+          <input id="contrastToggle" type="checkbox" /> Alto contraste
+        </label>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="eyebrow">Documento de apoio para integração futura</div>
+      <h1>Relatório do mapa-base do trombone.</h1>
+      <p class="lead">
+        Esta página organiza o projeto em linguagem clara para facilitar revisão, publicação no GitHub e futura integração direta com o mapa-base. A ideia é que o relatório funcione como uma camada explicativa separada, sem misturar o conteúdo pedagógico com a interface principal.
+      </p>
+      <div class="actions">
+        <a class="nav-link" href="index.html">Abrir mapa-base</a>
+        <a class="nav-link" href="#integracao">Ver integração</a>
+      </div>
+    </section>
+
+    <!-- Sistema de abas -->
+    <div class="tabs" role="tablist">
+      <button class="tab-button active" data-tab="visao-geral" role="tab">Visão Geral</button>
+      <button class="tab-button" data-tab="escalas" role="tab">Escalas</button>
+      <button class="tab-button" data-tab="vara" role="tab">Vara do Trombone</button>
+      <button class="tab-button" data-tab="posicoes" role="tab">Posições</button>
+      <button class="tab-button" data-tab="integracao" role="tab">Integração</button>
+    </div>
+
+    <!-- Aba: Visão Geral -->
+    <section class="tab-content active" id="visao-geral" role="tabpanel">
+      <section class="grid">
+        <article class="card">
+          <div class="panel-title">
+            <h2>Resumo executivo</h2>
+            <span class="tag">objetivo pedagógico</span>
+          </div>
+          <div class="stack">
+            <div class="item">
+              <strong>Propósito</strong>
+              <span>Transformar leitura, posição da vara, registro e alternativa harmônica em uma visualização espacial simples.</span>
+            </div>
+            <div class="item">
+              <strong>Si maior como exemplo</strong>
+              <span>Na leitura do trombone, o Si maior fica em 7ª posição no Si, depois C#6, D#4, E2, F#1, G#4, A#2 e retorna ao Si7.</span>
+            </div>
+            <div class="item">
+              <strong>Uso previsto</strong>
+              <span>Estudo curto em celular e tablet, com foco em rotina, repetição leve e baixa carga mental.</span>
+            </div>
+            <div class="item">
+              <strong>Formato técnico</strong>
+              <span>Página HTML única na interface principal, com relatório separado para documentação e evolução do projeto.</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="panel-title">
+            <h2>Estado atual</h2>
+            <span class="tag">estrutura</span>
+          </div>
+          <div class="list">
+            <div class="row">Mapa interativo com seleção de escalas.</div>
+            <div class="row">Destaque do caminho principal da escala.</div>
+            <div class="row">Alternativas automáticas com camada avançada.</div>
+            <div class="row">Timer de foco e metrônomo sonoro.</div>
+            <div class="row">Checklist e desafio curto para rotina diária.</div>
+          </div>
+        </article>
+      </section>
+    </section>
+
+    <!-- Aba: Escalas -->
+    <section class="tab-content" id="escalas" role="tabpanel">
+      <div class="panel-title" style="margin-bottom: 24px;">
+        <h2>Escalas Maiores para Trombone</h2>
+        <span class="tag">interativo</span>
+      </div>
+      
+      <div class="scale-card">
+        <h3>🎵 Dó Maior (C Major)</h3>
+        <p><strong>Posições principais:</strong> Dó(6ª) → Ré(4ª) → Mi(2ª) → Fá(1ª) → Sol(4ª) → Lá(2ª) → Si(7ª) → Dó(6ª)</p>
+        <div class="scale-notes">
+          <span class="note-badge">Dó — 6ª</span>
+          <span class="note-badge">Ré — 4ª</span>
+          <span class="note-badge">Mi — 2ª</span>
+          <span class="note-badge">Fá — 1ª</span>
+          <span class="note-badge">Sol — 4ª</span>
+          <span class="note-badge">Lá — 2ª</span>
+          <span class="note-badge">Si — 7ª</span>
+        </div>
+      </div>
+
+      <div class="scale-card">
+        <h3>🎵 Sol Maior (G Major)</h3>
+        <p><strong>Posições principais:</strong> Sol(4ª) → Lá(2ª) → Si(7ª) → Dó(6ª) → Ré(4ª) → Mi(2ª) → Fá#(2ª) → Sol(4ª)</p>
+        <div class="scale-notes">
+          <span class="note-badge">Sol — 4ª</span>
+          <span class="note-badge">Lá — 2ª</span>
+          <span class="note-badge">Si — 7ª</span>
+          <span class="note-badge">Dó — 6ª</span>
+          <span class="note-badge">Ré — 4ª</span>
+          <span class="note-badge">Mi — 2ª</span>
+          <span class="note-badge">Fá# — 2ª</span>
+        </div>
+      </div>
+
+      <div class="scale-card">
+        <h3>🎵 Ré Maior (D Major)</h3>
+        <p><strong>Posições principais:</strong> Ré(4ª) → Mi(2ª) → Fá#(2ª) → Sol(4ª) → Lá(2ª) → Si(7ª) → Dó#(6ª) → Ré(4ª)</p>
+        <div class="scale-notes">
+          <span class="note-badge">Ré — 4ª</span>
+          <span class="note-badge">Mi — 2ª</span>
+          <span class="note-badge">Fá# — 2ª</span>
+          <span class="note-badge">Sol — 4ª</span>
+          <span class="note-badge">Lá — 2ª</span>
+          <span class="note-badge">Si — 7ª</span>
+          <span class="note-badge">Dó# — 6ª</span>
+        </div>
+      </div>
+
+      <div class="scale-card">
+        <h3>🎵 Lá Maior (A Major)</h3>
+        <p><strong>Posições principais:</strong> Lá(2ª) → Si(7ª) → Dó#(6ª) → Ré(4ª) → Mi(2ª) → Fá#(2ª) → Sol#(4ª) → Lá(2ª)</p>
+        <div class="scale-notes">
+          <span class="note-badge">Lá — 2ª</span>
+          <span class="note-badge">Si — 7ª</span>
+          <span class="note-badge">Dó# — 6ª</span>
+          <span class="note-badge">Ré — 4ª</span>
+          <span class="note-badge">Mi — 2ª</span>
+          <span class="note-badge">Fá# — 2ª</span>
+          <span class="note-badge">Sol# — 4ª</span>
+        </div>
+      </div>
+
+      <div class="scale-card">
+        <h3>🎵 Mi Maior (E Major)</h3>
+        <p><strong>Posições principais:</strong> Mi(2ª) → Fá#(2ª) → Sol#(4ª) → Lá(2ª) → Si(7ª) → Dó#(6ª) → Ré#(4ª) → Mi(2ª)</p>
+        <div class="scale-notes">
+          <span class="note-badge">Mi — 2ª</span>
+          <span class="note-badge">Fá# — 2ª</span>
+          <span class="note-badge">Sol# — 4ª</span>
+          <span class="note-badge">Lá — 2ª</span>
+          <span class="note-badge">Si — 7ª</span>
+          <span class="note-badge">Dó# — 6ª</span>
+          <span class="note-badge">Ré# — 4ª</span>
+        </div>
+      </div>
+
+      <div class="scale-card">
+        <h3>🎵 Fá# Maior (F# Major)</h3>
+        <p><strong>Posições principais:</strong> Fá#(2ª) → Sol#(4ª) → Lá#(2ª) → Si(7ª) → Dó#(6ª) → Ré#(4ª) → Mi#(2ª) → Fá#(2ª)</p>
+        <div class="scale-notes">
+          <span class="note-badge">Fá# — 2ª</span>
+          <span class="note-badge">Sol# — 4ª</span>
+          <span class="note-badge">Lá# — 2ª</span>
+          <span class="note-badge">Si — 7ª</span>
+          <span class="note-badge">Dó# — 6ª</span>
+          <span class="note-badge">Ré# — 4ª</span>
+          <span class="note-badge">Mi# — 2ª</span>
+        </div>
+      </div>
+
+      <div class="scale-card">
+        <h3>🎵 Si Maior (B Major)</h3>
+        <p><strong>Posições principais:</strong> Si(7ª) → Dó#(6ª) → Ré#(4ª) → Mi(2ª) → Fá#(1ª) → Sol#(4ª) → Lá#(2ª) → Si(7ª)</p>
+        <div class="scale-notes">
+          <span class="note-badge">Si — 7ª</span>
+          <span class="note-badge">Dó# — 6ª</span>
+          <span class="note-badge">Ré# — 4ª</span>
+          <span class="note-badge">Mi — 2ª</span>
+          <span class="note-badge">Fá# — 1ª</span>
+          <span class="note-badge">Sol# — 4ª</span>
+          <span class="note-badge">Lá# — 2ª</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Aba: Vara do Trombone -->
+    <section class="tab-content" id="vara" role="tabpanel">
+      <div class="panel-title" style="margin-bottom: 24px;">
+        <h2>Guia Visual da Vara do Trombone</h2>
+        <span class="tag">referência técnica</span>
+      </div>
+
+      <div class="trombone-slider">
+        <div class="trombone-visual">
+          <svg viewBox="0 0 260 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Campana (sino) -->
+            <ellipse cx="130" cy="50" rx="35" ry="15" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M 95 50 L 85 120 Q 85 140 110 160 L 150 160 Q 175 140 175 120 L 165 50" fill="none" stroke="currentColor" stroke-width="2"/>
+            
+            <!-- Tubo principal -->
+            <rect x="100" y="160" width="60" height="180" fill="none" stroke="currentColor" stroke-width="2" rx="4"/>
+            
+            <!-- Posições da vara com marcações -->
+            <g id="positions">
+              <!-- 1ª posição (0 cm) -->
+              <line x1="65" y1="190" x2="195" y2="190" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/>
+              <text x="200" y="195" font-size="11" font-family="sans-serif">1ª</text>
+              <text x="40" y="195" font-size="10" font-family="sans-serif" fill="var(--muted)">0 cm</text>
+              
+              <!-- 2ª posição (~7 cm) -->
+              <line x1="65" y1="215" x2="195" y2="215" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/>
+              <text x="200" y="220" font-size="11" font-family="sans-serif">2ª</text>
+              <text x="35" y="220" font-size="10" font-family="sans-serif" fill="var(--muted)">~7 cm</text>
+              
+              <!-- 3ª posição (~17 cm) -->
+              <line x1="65" y1="245" x2="195" y2="245" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/>
+              <text x="200" y="250" font-size="11" font-family="sans-serif">3ª</text>
+              <text x="30" y="250" font-size="10" font-family="sans-serif" fill="var(--muted)">~17 cm</text>
+              
+              <!-- 4ª posição (~23 cm) -->
+              <line x1="65" y1="265" x2="195" y2="265" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/>
+              <text x="200" y="270" font-size="11" font-family="sans-serif">4ª</text>
+              <text x="30" y="270" font-size="10" font-family="sans-serif" fill="var(--muted)">~23 cm</text>
+              
+              <!-- 5ª posição (~36 cm) -->
+              <line x1="65" y1="295" x2="195" y2="295" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/>
+              <text x="200" y="300" font-size="11" font-family="sans-serif">5ª</text>
+              <text x="30" y="300" font-size="10" font-family="sans-serif" fill="var(--muted)">~36 cm</text>
+              
+              <!-- 6ª posição (~46 cm) -->
+              <line x1="65" y1="325" x2="195" y2="325" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/>
+              <text x="200" y="330" font-size="11" font-family="sans-serif">6ª</text>
+              <text x="30" y="330" font-size="10" font-family="sans-serif" fill="var(--muted)">~46 cm</text>
+              
+              <!-- 7ª posição (~54 cm) -->
+              <line x1="65" y1="350" x2="195" y2="350" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/>
+              <text x="200" y="355" font-size="11" font-family="sans-serif">7ª</text>
+              <text x="30" y="355" font-size="10" font-family="sans-serif" fill="var(--muted)">~54 cm</text>
+            </g>
+
+            <!-- Vara (slide) -->
+            <rect x="110" y="180" width="8" height="170" fill="rgba(44, 162, 95, 0.3)" stroke="var(--accent)" stroke-width="2" rx="2"/>
+            <path d="M 115 360 L 120 375 M 115 360 L 110 375" stroke="var(--accent)" stroke-width="1.5"/>
+          </svg>
+        </div>
+
+        <div>
+          <h3>Extensão da Vara</h3>
+          <p style="margin-bottom: 16px; color: var(--muted);">
+            A vara do trombone estende-se aproximadamente <strong>54 cm</strong> desde a posição fechada (1ª) até a completamente estendida (7ª). Abaixo estão as distâncias aproximadas de cada posição:
+          </p>
+
+          <div style="background: rgba(44, 162, 95, 0.08); padding: 16px; border-radius: 12px; border-left: 4px solid var(--accent);">
+            <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+              <li><strong>1ª posição:</strong> 0 cm (vara fechada)</li>
+              <li><strong>2ª posição:</strong> ~7 cm</li>
+              <li><strong>3ª posição:</strong> ~17 cm</li>
+              <li><strong>4ª posição:</strong> ~23 cm</li>
+              <li><strong>5ª posição:</strong> ~36 cm</li>
+              <li><strong>6ª posição:</strong> ~46 cm</li>
+              <li><strong>7ª posição:</strong> ~54 cm (completamente estendida)</li>
+            </ul>
+          </div>
+
+          <p style="margin-top: 16px; font-size: 13px; color: var(--muted);">
+            <strong>Nota técnica:</strong> Essas distâncias são aproximadas e podem variar conforme o tamanho e modelo do trombone. O importante é manter a consistência entre as posições para garantir afinação correta.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Aba: Posições -->
+    <section class="tab-content" id="posicoes" role="tabpanel">
+      <div class="panel-title" style="margin-bottom: 24px;">
+        <h2>Tabela de Posições e Notas</h2>
+        <span class="tag">referência</span>
+      </div>
+
+      <p style="margin-bottom: 20px; color: var(--muted);">
+        Esta tabela mostra as notas disponíveis em cada posição da vara, com as alternativas harmônicas mais comuns:
+      </p>
+
+      <table class="position-table">
+        <thead>
+          <tr>
+            <th>Posição</th>
+            <th>Distância</th>
+            <th>Notas Principais</th>
+            <th>Alternativas Harmônicas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1ª</strong></td>
+            <td>0 cm</td>
+            <td>Fá, Ré (2ª oitava), Lá (agudo)</td>
+            <td>Dó# (parcial comum)</td>
+          </tr>
+          <tr>
+            <td><strong>2ª</strong></td>
+            <td>~7 cm</td>
+            <td>Mi, Dó (2ª oitava), Sol (agudo)</td>
+            <td>Ré# (parcial alternativa)</td>
+          </tr>
+          <tr>
+            <td><strong>3ª</strong></td>
+            <td>~17 cm</td>
+            <td>Ré, Si♭ (2ª oitava), Fá (agudo)</td>
+            <td>Lá (parcial alternativa)</td>
+          </tr>
+          <tr>
+            <td><strong>4ª</strong></td>
+            <td>~23 cm</td>
+            <td>Dó#, A (2ª oitava), Mi (agudo)</td>
+            <td>Sol (parcial comum)</td>
+          </tr>
+          <tr>
+            <td><strong>5ª</strong></td>
+            <td>~36 cm</td>
+            <td>Dó, Sol (2ª oitava), Ré (agudo)</td>
+            <td>Fá (parcial alternativa)</td>
+          </tr>
+          <tr>
+            <td><strong>6ª</strong></td>
+            <td>~46 cm</td>
+            <td>Si, Fá# (2ª oitava), Dó# (agudo)</td>
+            <td>Sol# (parcial alternativa)</td>
+          </tr>
+          <tr>
+            <td><strong>7ª</strong></td>
+            <td>~54 cm</td>
+            <td>Si♭, Mi (2ª oitava), Si (agudo)</td>
+            <td>Lá (parcial comum)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top: 24px; font-size: 13px; color: var(--muted); background: rgba(44, 162, 95, 0.08); padding: 16px; border-radius: 12px;">
+        <strong>Dica de estudo:</strong> As alternativas harmônicas são úteis para passagens rápidas ou para melhorar a afinação em contextos orquestrais. Na 7ª posição, por exemplo, você pode tocar Si♭ (nota fundamental), Mi (3ª harmônica) ou Si (1ª harmônica), dependendo da parcial que usar.
+      </p>
+    </section>
+
+    <!-- Aba: Integração -->
+    <section class="tab-content" id="integracao" role="tabpanel">
+      <section class="grid">
+        <article class="card">
+          <div class="panel-title">
+            <h2>Plano de integração</h2>
+            <span class="tag">futuro</span>
+          </div>
+          <div class="timeline">
+            <div class="step"><div class="badge">1</div><div><strong>Separar camadas</strong><span>Manter o mapa-base como interface principal e o relatório como suporte documental navegável.</span></div></div>
+            <div class="step"><div class="badge">2</div><div><strong>Conectar os fluxos</strong><span>Adicionar links internos entre mapa, relatório e possíveis páginas novas de exercícios ou repertório.</span></div></div>
+            <div class="step"><div class="badge">3</div><div><strong>Preparar publicação</strong><span>Deixar tudo pronto para repositório GitHub e publicação no GitHub Pages, sem dependências externas.</span></div></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="panel-title">
+            <h2>Critérios de responsividade</h2>
+            <span class="tag">mobile first</span>
+          </div>
+          <div class="stack">
+            <div class="item">
+              <strong>Celular</strong>
+              <span>Empilhar controles, reduzir padding e manter o mapa com rolagem horizontal controlada.</span>
+            </div>
+            <div class="item">
+              <strong>Tablet</strong>
+              <span>Usar duas colunas quando houver espaço e uma coluna quando a tela ficar estreita.</span>
+            </div>
+            <div class="item">
+              <strong>Leitura</strong>
+              <span>Tipografia grande, contraste alto e blocos curtos para facilitar revisão rápida.</span>
+            </div>
+          </div>
+        </article>
+      </section>
+    </section>
+
+    <section class="card">
+      <div class="panel-title">
+        <h2>Observação técnica</h2>
+        <span class="tag">próximo passo</span>
+      </div>
+      <p class="footer-note">
+        Este relatório já nasce separado do mapa-base para permitir expansão por páginas: uma visão pedagógica principal, documentação do projeto e, depois, eventual ligação com páginas de estudo, repertório e exercícios.
+      </p>
+    </section>
+  </main>
+  <script>
+    const themeSelect = document.getElementById('themeSelect');
+    const contrastToggle = document.getElementById('contrastToggle');
+
+    function applyAppearance(theme, highContrast) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-contrast', highContrast ? 'high' : 'normal');
+      try {
+        localStorage.setItem('trombone-theme', theme);
+        localStorage.setItem('trombone-contrast', highContrast ? 'high' : 'normal');
+      } catch (e) {}
+    }
+
+    (function initAppearance() {
+      let storedTheme = 'light';
+      let storedContrast = 'normal';
+      try {
+        storedTheme = localStorage.getItem('trombone-theme') || 'light';
+        storedContrast = localStorage.getItem('trombone-contrast') || 'normal';
+      } catch (e) {}
+
+      themeSelect.value = storedTheme;
+      contrastToggle.checked = storedContrast === 'high';
+      applyAppearance(themeSelect.value, contrastToggle.checked);
+
+      themeSelect.addEventListener('change', () => {
+        applyAppearance(themeSelect.value, contrastToggle.checked);
+      });
+
+      contrastToggle.addEventListener('change', () => {
+        applyAppearance(themeSelect.value, contrastToggle.checked);
+      });
+    })();
+
+    // Sistema de abas
+    (function initTabs() {
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const tabId = button.getAttribute('data-tab');
+
+          // Remove active de todos os botões e conteúdos
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+
+          // Adiciona active ao botão e conteúdo clicado
+          button.classList.add('active');
+          const activeContent = document.getElementById(tabId);
+          if (activeContent) {
+            activeContent.classList.add('active');
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
