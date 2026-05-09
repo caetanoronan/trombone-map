@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Mapa Base do Trombone">
+  <rect width="512" height="512" fill="#2ca25f"/>
+  <circle cx="256" cy="256" r="184" fill="#f7fcfd"/>
+  <path d="M144 308h214c45 0 74-24 74-59s-29-59-74-59H172" fill="none" stroke="#2ca25f" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M172 190v118" fill="none" stroke="#17313a" stroke-width="28" stroke-linecap="round"/>
+  <path d="M104 235h92" fill="none" stroke="#17313a" stroke-width="26" stroke-linecap="round"/>
+  <path d="M104 263h92" fill="none" stroke="#17313a" stroke-width="26" stroke-linecap="round"/>
+  <circle cx="358" cy="249" r="33" fill="#5abfa6" stroke="#17313a" stroke-width="14"/>
+  <path d="M158 372c28-21 58-21 86 0s58 21 86 0" fill="none" stroke="#117a65" stroke-width="20" stroke-linecap="round"/>
+</svg>
