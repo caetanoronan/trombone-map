@@ -1,0 +1,1920 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mapa Base do Trombone</title>
+  <style>
+    :root {
+      --bg: #e5f5f9;
+      --bg-2: #f7fcfd;
+      --card: rgba(255, 255, 255, 0.92);
+      --surface-1: rgba(255, 255, 255, 0.88);
+      --surface-2: rgba(255, 255, 255, 0.78);
+      --surface-3: rgba(255, 255, 255, 0.68);
+      --ink: #17313a;
+      --muted: #4b6770;
+      --accent: #2ca25f;
+      --accent-2: #5abfa6;
+      --accent-3: #117a65;
+      --line: rgba(23, 49, 58, 0.14);
+      --shadow: 0 18px 50px rgba(23, 49, 58, 0.10);
+      --radius: 24px;
+      --focus-ring: rgba(44, 162, 95, 0.42);
+      --fn-tonica: #0f766e;
+      --fn-terca: #2563eb;
+      --fn-quinta: #b45309;
+      --fn-sensivel: #be185d;
+      --fn-neutra: #64748b;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0d1720;
+      --bg-2: #121f2b;
+      --card: rgba(19, 31, 43, 0.92);
+      --surface-1: rgba(25, 39, 54, 0.92);
+      --surface-2: rgba(21, 34, 47, 0.86);
+      --surface-3: rgba(17, 29, 40, 0.82);
+      --ink: #e8f3f8;
+      --muted: #b7c8d3;
+      --accent: #38c777;
+      --accent-2: #62d1b8;
+      --accent-3: #31b28d;
+      --line: rgba(203, 227, 240, 0.20);
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      --focus-ring: rgba(98, 209, 184, 0.55);
+      --fn-tonica: #5eead4;
+      --fn-terca: #93c5fd;
+      --fn-quinta: #fdba74;
+      --fn-sensivel: #f9a8d4;
+      --fn-neutra: #cbd5e1;
+    }
+
+    html[data-contrast="high"] {
+      --bg: #ffffff;
+      --bg-2: #f3f4f6;
+      --card: #ffffff;
+      --surface-1: #ffffff;
+      --surface-2: #ffffff;
+      --surface-3: #ffffff;
+      --ink: #0b0f14;
+      --muted: #1f2937;
+      --line: rgba(11, 15, 20, 0.52);
+      --shadow: none;
+      --focus-ring: #0b0f14;
+    }
+
+    html[data-theme="dark"][data-contrast="high"] {
+      --bg: #060a0f;
+      --bg-2: #0b1118;
+      --card: #0d1720;
+      --surface-1: #111d28;
+      --surface-2: #111d28;
+      --surface-3: #111d28;
+      --ink: #f8fafc;
+      --muted: #e2e8f0;
+      --line: rgba(248, 250, 252, 0.5);
+      --shadow: none;
+      --focus-ring: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI Variable", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(44, 162, 95, 0.20), transparent 28%),
+        radial-gradient(circle at top right, rgba(90, 191, 166, 0.18), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(17, 122, 101, 0.14), transparent 28%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      min-height: 100vh;
+    }
+
+    .shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .theme-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .theme-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      font-size: 0.84rem;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .theme-control select {
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--surface-1);
+      color: var(--ink);
+      padding: 6px 8px;
+      font: inherit;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(31, 41, 51, 0.08);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .panel:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 24px 54px rgba(23, 49, 58, 0.14);
+    }
+
+    .hero-main {
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -100px auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(44, 162, 95, 0.18), transparent 65%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(44, 162, 95, 0.10);
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 3.4vw, 3.8rem);
+      line-height: 1.04;
+      max-width: 12ch;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 68ch;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .hero-actions .nav-link {
+      background: rgba(31, 41, 51, 0.04);
+      box-shadow: none;
+    }
+
+    .hero-side {
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface-1), var(--surface-3));
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      padding: 22px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.35rem;
+    }
+
+    .card p.sub {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .note-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
+
+    .function-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
+
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-1);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .legend-chip.function {
+      border-left-width: 4px;
+    }
+
+    .fn-icon {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      flex: 0 0 auto;
+      margin-right: 2px;
+      background: currentColor;
+    }
+
+    .fn-circle {
+      border-radius: 50%;
+    }
+
+    .fn-triangle {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 11px solid currentColor;
+      background: transparent;
+    }
+
+    .fn-square {
+      border-radius: 2px;
+    }
+
+    .fn-diamond {
+      transform: rotate(45deg);
+      border-radius: 1px;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(23, 49, 58, 0.08);
+      flex: 0 0 auto;
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .field-row label {
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .field-row select,
+    .field-row input {
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      font: inherit;
+      background: var(--surface-1);
+      color: var(--ink);
+    }
+
+    .callout {
+      margin: 16px 0 18px;
+      padding: 14px 16px;
+      border-left: 6px solid var(--accent);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .callout strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(135deg, #2ca25f, #117a65);
+      box-shadow: 0 10px 24px rgba(44, 162, 95, 0.18);
+      transition: transform 0.18s ease, filter 0.18s ease;
+    }
+
+    button.secondary {
+      background: linear-gradient(135deg, #5abfa6, #2ca25f);
+      box-shadow: 0 10px 24px rgba(90, 191, 166, 0.18);
+    }
+
+    button.ghost {
+      color: var(--ink);
+      background: var(--surface-2);
+      box-shadow: none;
+      border: 1px solid var(--line);
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: saturate(1.04);
+    }
+
+    .map-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .map {
+      min-width: 780px;
+      display: grid;
+      grid-template-columns: 120px repeat(7, minmax(80px, 1fr));
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .cell {
+      min-height: 70px;
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--surface-3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .cell:hover {
+      transform: translateY(-1px);
+      border-color: rgba(23, 49, 58, 0.22);
+    }
+
+    .cell.head {
+      background: rgba(23, 49, 58, 0.05);
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .row-label {
+      text-align: left;
+      font-weight: 800;
+      color: var(--ink);
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+
+    .row-swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+      vertical-align: middle;
+      box-shadow: 0 0 0 3px rgba(23, 49, 58, 0.07);
+    }
+
+    .note-colored {
+      background: linear-gradient(180deg, var(--surface-1), var(--surface-3));
+      border-color: color-mix(in srgb, var(--note-color) 42%, white);
+    }
+
+    .function-colored {
+      box-shadow: inset 0 3px 0 var(--function-color, var(--fn-neutra));
+    }
+
+    .note-colored .note {
+      color: var(--note-color);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .function-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(23, 49, 58, 0.16);
+      background: var(--surface-1);
+      color: var(--muted);
+      font-size: 0.68rem;
+      line-height: 1;
+      font-weight: 700;
+      vertical-align: middle;
+    }
+
+    .cell-function-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 6px;
+      color: var(--function-color, var(--fn-neutra));
+      transform: translateY(1px);
+    }
+
+    .cell-function-icon .fn-icon {
+      margin-right: 0;
+      width: 10px;
+      height: 10px;
+    }
+
+    .note {
+      font-size: 1.02rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+    }
+
+    .alt-chip {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--surface-2) 90%, transparent);
+      font-size: 0.78rem;
+      color: var(--muted);
+      border: 1px solid rgba(23,49,58,0.08);
+      border-left-width: 4px;
+      line-height: 1.2;
+    }
+
+    .pos {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.25;
+    }
+
+    .highlight {
+      background: linear-gradient(180deg, rgba(44, 162, 95, 0.18), rgba(90, 191, 166, 0.10));
+      border-color: rgba(44, 162, 95, 0.32);
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 20px;
+    }
+
+    .routine {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: var(--surface-3);
+    }
+
+    .badge {
+      min-width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      flex: 0 0 auto;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .step span {
+      display: block;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .timer {
+      display: grid;
+      gap: 14px;
+    }
+
+    .time-display {
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .progress {
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(31, 41, 51, 0.08);
+      overflow: hidden;
+    }
+
+    .bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width 0.35s ease;
+    }
+
+    .modes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .challenge {
+      border-left: 6px solid var(--accent);
+      padding-left: 16px;
+      color: var(--ink);
+      line-height: 1.65;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .checklist label {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: var(--surface-3);
+      border: 1px solid var(--line);
+      line-height: 1.45;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .soundbox {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: var(--surface-3);
+      display: grid;
+      gap: 12px;
+    }
+
+    .beat-light {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(31, 41, 51, 0.18);
+      box-shadow: inset 0 0 0 2px rgba(31, 41, 51, 0.1);
+      transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .beat-light.active {
+      transform: scale(1.18);
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      box-shadow: 0 0 0 8px rgba(44, 162, 95, 0.08);
+    }
+
+    .inline-status {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        justify-content: space-between;
+      }
+
+      .map {
+        min-width: 820px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 14px;
+      }
+
+      .hero {
+        gap: 14px;
+      }
+
+      .hero-main,
+      .card,
+      .hero-side {
+        padding: 18px;
+      }
+
+      .hero-main::after {
+        width: 180px;
+        height: 180px;
+        inset: auto -70px -70px auto;
+      }
+
+      h1 {
+        font-size: clamp(1.7rem, 8vw, 2.5rem);
+      }
+
+      .lead,
+      .card p.sub,
+      .footer-note,
+      .challenge,
+      .step span,
+      .stat span {
+        font-size: 0.95rem;
+      }
+
+      .field-row {
+        display: grid !important;
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+
+      .field-row label {
+        width: 100%;
+      }
+
+      .field-row select,
+      .field-row input,
+      .nav-link,
+      .theme-control,
+      button,
+      .modes button {
+        width: 100%;
+      }
+
+      .controls,
+      .modes,
+      .hero-actions {
+        display: grid !important;
+        grid-template-columns: 1fr;
+      }
+
+      .theme-controls {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 1fr;
+      }
+
+      .note-legend {
+        gap: 6px;
+      }
+
+      .function-legend {
+        gap: 6px;
+      }
+
+      .legend-chip {
+        width: calc(50% - 3px);
+        justify-content: flex-start;
+      }
+
+      .controls {
+        margin-bottom: 16px;
+      }
+
+      .map {
+        min-width: 760px;
+        gap: 6px;
+        grid-template-columns: 96px repeat(7, minmax(72px, 1fr));
+      }
+
+      .cell {
+        min-height: 62px;
+        padding: 8px;
+        border-radius: 14px;
+      }
+
+      .note {
+        font-size: 0.88rem;
+        line-height: 1.18;
+      }
+
+      .pos,
+      .alt-chip {
+        font-size: 0.7rem;
+        line-height: 1.2;
+      }
+
+      .function-badge {
+        font-size: 0.64rem;
+        padding: 2px 6px;
+        gap: 4px;
+      }
+
+      .cell-function-icon {
+        margin-right: 4px;
+      }
+
+      .cell-function-icon .fn-icon {
+        width: 9px;
+        height: 9px;
+      }
+
+      .legend-chip {
+        font-size: 0.76rem;
+      }
+
+      .legend-dot,
+      .fn-icon.fn-circle,
+      .fn-icon.fn-square,
+      .fn-icon.fn-diamond {
+        width: 10px;
+        height: 10px;
+      }
+
+      .fn-icon.fn-triangle {
+        border-left-width: 5px;
+        border-right-width: 5px;
+        border-bottom-width: 10px;
+      }
+
+      .controls,
+      .modes {
+        grid-template-columns: 1fr;
+      }
+      button,
+      .nav-link,
+      .modes button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topbar">
+      <a class="nav-link" href="relatorio.html">Abrir relatório</a>
+      <div class="theme-controls" aria-label="Controles de tema e contraste">
+        <label class="theme-control" for="themeSelect">
+          <span>Tema</span>
+          <select id="themeSelect" aria-label="Escolher tema visual">
+            <option value="light">Claro</option>
+            <option value="dark">Escuro</option>
+          </select>
+        </label>
+        <label class="theme-control" for="contrastToggle">
+          <input id="contrastToggle" type="checkbox" /> Alto contraste
+        </label>
+      </div>
+    </div>
+    <section class="hero">
+      <article class="panel hero-main">
+        <div class="eyebrow">Mapa-base do trombone</div>
+        <h1>Estudo musical visual, leve e interativo.</h1>
+        <p class="lead">
+          Esta página transforma a leitura e a prática em uma rotina guiada: você enxerga posições, registros, notas e tarefas curtas em um formato pensado para reduzir carga mental e facilitar a organização do estudo.
+        </p>
+        <div class="hero-actions">
+          <a class="nav-link" href="relatorio.html">Ver relatório do projeto</a>
+          <a class="nav-link" href="#mapGrid">Ir ao mapa</a>
+        </div>
+      </article>
+
+      <aside class="panel hero-side">
+        <div class="stat">
+          <strong>Regra principal</strong>
+          <span>Uma tarefa concreta por vez. Ex.: “5 min de leitura rítmica” em vez de “estudar música”.</span>
+        </div>
+        <div class="stat">
+          <strong>Foco visual</strong>
+          <span>A grade mostra onde a nota vive: posição da vara + registro + direção do movimento.</span>
+        </div>
+        <div class="stat">
+          <strong>Gancho motivador</strong>
+          <span>O botão de desafio sorteia um micro-objetivo para tornar a rotina menos repetitiva.</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="panel card">
+        <h2 id="mapTitle">Mapa da escala de Dó maior</h2>
+        <p class="sub">Clique em “Destacar caminho” para visualizar a sequência principal da escala no trombone.</p>
+        <div class="field-row">
+          <label for="scaleSelect">Escolher escala</label>
+          <select id="scaleSelect" aria-label="Escolher escala do mapa">
+            <option value="c" selected>Dó maior</option>
+            <option value="g">Sol maior</option>
+            <option value="d">Ré maior</option>
+            <option value="a">Lá maior</option>
+            <option value="e">Mi maior</option>
+            <option value="b">Si maior</option>
+            <option value="fsharp">Fá# maior</option>
+            <option value="bb">Si bemol maior</option>
+            <option value="f">Fá maior</option>
+            <option value="eb">Mi bemol maior</option>
+            <option value="ab">Lá bemol (Ab) maior</option>
+            <option value="db">Ré bemol (Db) maior</option>
+          </select>
+        </div>
+        <div class="controls">
+          <button id="highlightBtn">Destacar caminho</button>
+          <label style="align-items:center;display:inline-flex;gap:8px"><input id="showAltsToggle" type="checkbox" /> Mostrar alternativas</label>
+          <label style="align-items:center;display:inline-flex;gap:8px"><input id="advancedToggle" type="checkbox" /> Camada avançada</label>
+          <button class="secondary" id="randomBtn">Gerar desafio</button>
+          <button class="ghost" id="resetBtn">Limpar destaque</button>
+        </div>
+        <div class="note-legend" id="noteLegend" aria-label="Padrão de cores das notas"></div>
+        <div class="function-legend" id="functionLegend" aria-label="Padrão de cores por função harmônica"></div>
+        <div class="callout" id="scaleNote">
+          <strong>Observação do trombone</strong>
+          A mesma posição pode receber notas diferentes conforme a embocadura, o sopro e a parcial. Na 4ª posição, por exemplo, podem aparecer Sol e Ré em registros diferentes. Por isso, este mapa mostra posição + registro, não só a posição.
+        </div>
+        <div class="map-wrap">
+          <div class="map" id="mapGrid" aria-label="Mapa da escala de Si bemol maior"></div>
+        </div>
+      </article>
+
+      <aside class="sidebar">
+        <article class="panel card">
+          <h2>Rotina de estudo</h2>
+          <p class="sub">Uma sequência curta, repetível e fácil de marcar no celular.</p>
+          <div class="routine">
+            <div class="step"><div class="badge">1</div><div><strong>Aquecimento</strong><span>2 min de respiração e ataque suave, sem pressa.</span></div></div>
+            <div class="step"><div class="badge">2</div><div><strong>Leitura guiada</strong><span>3 min de leitura de notas usando apenas uma linha da pauta.</span></div></div>
+            <div class="step"><div class="badge">3</div><div><strong>Mapa da vara</strong><span>3 min marcando a posição e verbalizando a nota em voz baixa.</span></div></div>
+            <div class="step"><div class="badge">4</div><div><strong>Aplicação</strong><span>4 min tocando a escala com metrônomo ou semicolcheias lentas.</span></div></div>
+          </div>
+        </article>
+
+        <article class="panel card timer">
+          <h2>Timer de foco</h2>
+          <p class="sub">Use blocos curtos para vencer a inércia e não sobrecarregar a atenção.</p>
+          <div class="time-display" id="timeDisplay">10:00</div>
+          <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+          <div class="modes">
+            <button class="secondary" data-minutes="5">5 min</button>
+            <button class="secondary" data-minutes="10">10 min</button>
+            <button class="secondary" data-minutes="15">15 min</button>
+            <button class="secondary" data-minutes="20">20 min</button>
+          </div>
+          <div class="controls" style="margin: 0;">
+            <button id="startBtn">Iniciar</button>
+            <button class="ghost" id="pauseBtn">Pausar</button>
+            <button class="ghost" id="stopBtn">Parar</button>
+          </div>
+          <div class="footer-note">Quando o tempo acabar, a tela sugere uma próxima ação pequena para manter a rotina viva.</div>
+        </article>
+
+        <article class="panel card">
+          <h2>Metrônomo e som</h2>
+          <p class="sub">Um clique simples ajuda a fixar pulsação e organiza o estudo por blocos curtos.</p>
+          <div class="soundbox">
+            <div class="field-row" style="margin: 0;">
+              <label for="bpmInput">BPM</label>
+              <input id="bpmInput" type="range" min="40" max="120" value="72" />
+              <strong id="bpmLabel">72</strong>
+            </div>
+            <div class="inline-status">
+              <div class="beat-light" id="beatLight" aria-hidden="true"></div>
+              <span id="metronomeStatus">Metrônomo parado. Toque em iniciar para marcar a pulsação.</span>
+            </div>
+            <div class="controls" style="margin: 0;">
+              <button class="secondary" id="metroStartBtn">Iniciar metrônomo</button>
+              <button class="ghost" id="metroStopBtn">Parar metrônomo</button>
+              <button class="ghost" id="testSoundBtn">Testar som</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel card">
+          <h2>Checklist do dia</h2>
+          <p class="sub">Marque o que realmente foi feito. Sem culpa, sem excesso.</p>
+          <div class="checklist">
+            <label><input type="checkbox" /> Leitura rítmica por 5 minutos</label>
+            <label><input type="checkbox" /> Escala de Si bemol maior no trombone</label>
+            <label><input type="checkbox" /> Rever um trecho difícil da orquestra</label>
+            <label><input type="checkbox" /> Registrar uma dúvida para estudar depois</label>
+          </div>
+        </article>
+
+        <article class="panel card">
+          <h2>Desafio do dia</h2>
+          <p class="challenge" id="challengeText">
+            Toque a escala de Si bemol maior em semínimas, falando o nome de cada nota antes de tocar.
+          </p>
+        </article>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const mapGrid = document.getElementById('mapGrid');
+    const highlightBtn = document.getElementById('highlightBtn');
+    const showAltsToggle = document.getElementById('showAltsToggle');
+    const advancedToggle = document.getElementById('advancedToggle');
+    const randomBtn = document.getElementById('randomBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const challengeText = document.getElementById('challengeText');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const bar = document.getElementById('bar');
+    const mapTitle = document.getElementById('mapTitle');
+    const noteLegend = document.getElementById('noteLegend');
+    const functionLegend = document.getElementById('functionLegend');
+    const themeSelect = document.getElementById('themeSelect');
+    const contrastToggle = document.getElementById('contrastToggle');
+    const scaleSelect = document.getElementById('scaleSelect');
+    const scaleNote = document.getElementById('scaleNote');
+    const bpmInput = document.getElementById('bpmInput');
+    const bpmLabel = document.getElementById('bpmLabel');
+    const beatLight = document.getElementById('beatLight');
+    const metronomeStatus = document.getElementById('metronomeStatus');
+    const metroStartBtn = document.getElementById('metroStartBtn');
+    const metroStopBtn = document.getElementById('metroStopBtn');
+    const testSoundBtn = document.getElementById('testSoundBtn');
+    const startBtn = document.getElementById('startBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const stopBtn = document.getElementById('stopBtn');
+
+    const columns = ['Registro', '1ª', '2ª', '3ª', '4ª', '5ª', '6ª', '7ª'];
+    const pitchColorMap = {
+      'C': '#2ca25f',
+      'C#': '#1f9d8a',
+      'Db': '#1f9d8a',
+      'D': '#2b8cbe',
+      'D#': '#5e4fa2',
+      'Eb': '#5e4fa2',
+      'E': '#7a6ff0',
+      'F': '#d95f0e',
+      'F#': '#d53e9f',
+      'Gb': '#d53e9f',
+      'G': '#1b9e77',
+      'G#': '#66a61e',
+      'Ab': '#66a61e',
+      'A': '#e6ab02',
+      'A#': '#a6761d',
+      'Bb': '#a6761d',
+      'B': '#7570b3'
+    };
+
+    const notePitchMap = {
+      'do': 'C',
+      're': 'D',
+      'mi': 'E',
+      'fa': 'F',
+      'sol': 'G',
+      'la': 'A',
+      'si': 'B',
+      'si natural': 'B',
+      'si bemol': 'Bb',
+      'mi bemol': 'Eb',
+      'la bemol': 'Ab',
+      're bemol': 'Db',
+      'sol bemol': 'Gb',
+      'fa#': 'F#',
+      'do#': 'C#',
+      're#': 'D#',
+      'sol#': 'G#',
+      'la#': 'A#',
+      'mi#': 'F'
+    };
+
+    const functionColorMap = {
+      tonica: 'var(--fn-tonica)',
+      terca: 'var(--fn-terca)',
+      quinta: 'var(--fn-quinta)',
+      sensivel: 'var(--fn-sensivel)',
+      neutra: 'var(--fn-neutra)'
+    };
+
+    const degreeFunctionMap = {
+      0: 'tonica',
+      2: 'terca',
+      4: 'quinta',
+      6: 'sensivel'
+    };
+
+    const functionLabelMap = {
+      tonica: 'Tônica',
+      terca: 'Terça',
+      quinta: 'Quinta',
+      sensivel: 'Sensível',
+      neutra: 'Grau'
+    };
+
+    const functionIconMap = {
+      tonica: 'fn-circle',
+      terca: 'fn-triangle',
+      quinta: 'fn-square',
+      sensivel: 'fn-diamond',
+      neutra: 'fn-circle'
+    };
+    const scales = {
+      bb: {
+        title: 'Si bemol maior',
+        description: 'Mapa principal para consolidar leitura visual, posição e registro.',
+        rows: [
+          { label: 'Si bemol', note: 'Si bemol', pos: '1ª' },
+          { label: 'Lá', note: 'Lá', pos: '2ª' },
+          { label: 'Sol', note: 'Sol', pos: '4ª' },
+          { label: 'Fá', note: 'Fá', pos: '1ª' },
+          { label: 'Mi bemol', note: 'Mi bemol', pos: '3ª' },
+          { label: 'Ré', note: 'Ré', pos: '4ª' },
+          { label: 'Dó', note: 'Dó', pos: '6ª' },
+        ],
+        path: [
+          { note: 'Si bemol', pos: '1ª' },
+          { note: 'Dó', pos: '6ª' },
+          { note: 'Ré', pos: '4ª' },
+          { note: 'Mi bemol', pos: '3ª' },
+          { note: 'Fá', pos: '1ª' },
+          { note: 'Sol', pos: '4ª' },
+          { note: 'Lá', pos: '2ª' },
+          { note: 'Si bemol', pos: '1ª' },
+        ],
+      },
+      f: {
+        title: 'Fá maior',
+        description: 'Boa para treinar leitura com saltos curtos e confirmação auditiva.',
+        rows: [
+          { label: 'Fá', note: 'Fá', pos: '1ª' },
+          { label: 'Sol', note: 'Sol', pos: '4ª' },
+          { label: 'Lá', note: 'Lá', pos: '2ª' },
+          { label: 'Si bemol', note: 'Si bemol', pos: '1ª' },
+          { label: 'Dó', note: 'Dó', pos: '6ª' },
+          { label: 'Ré', note: 'Ré', pos: '4ª' },
+          { label: 'Mi', note: 'Mi', pos: '2ª' },
+        ],
+        path: [
+          { note: 'Fá', pos: '1ª' },
+          { note: 'Sol', pos: '4ª' },
+          { note: 'Lá', pos: '2ª' },
+          { note: 'Si bemol', pos: '1ª' },
+          { note: 'Dó', pos: '6ª' },
+          { note: 'Ré', pos: '4ª' },
+          { note: 'Mi', pos: '2ª' },
+          { note: 'Fá', pos: '1ª' },
+        ],
+      },
+      c: {
+        title: 'Dó maior',
+        description: 'Útil para consolidar alternância de posições e leitura em voz alta.',
+        rows: [
+          { label: 'Dó', note: 'Dó', pos: '6ª' },
+          { label: 'Ré', note: 'Ré', pos: '4ª' },
+          { label: 'Mi', note: 'Mi', pos: '2ª' },
+          { label: 'Fá', note: 'Fá', pos: '1ª' },
+          { label: 'Sol', note: 'Sol', pos: '4ª' },
+          { label: 'Lá', note: 'Lá', pos: '2ª' },
+          { label: 'Si natural', note: 'Si natural', pos: '7ª' },
+        ],
+        path: [
+          { note: 'Dó', pos: '6ª' },
+          { note: 'Ré', pos: '4ª' },
+          { note: 'Mi', pos: '2ª' },
+          { note: 'Fá', pos: '1ª' },
+          { note: 'Sol', pos: '4ª' },
+          { note: 'Lá', pos: '2ª' },
+          { note: 'Si natural', pos: '7ª' },
+          { note: 'Dó', pos: '6ª' },
+        ],
+      },
+      g: {
+        title: 'Sol maior',
+        description: 'Sol maior — mapeamento conservador.',
+        rows: [
+          { label: 'Sol', note: 'Sol', pos: '4ª' },
+          { label: 'Lá', note: 'Lá', pos: '2ª' },
+          { label: 'Si', note: 'Si', pos: '7ª' },
+          { label: 'Dó', note: 'Dó', pos: '6ª' },
+          { label: 'Ré', note: 'Ré', pos: '4ª' },
+          { label: 'Mi', note: 'Mi', pos: '2ª' },
+          { label: 'Fá#', note: 'Fá#', pos: '2ª' },
+        ],
+        path: [
+          { note: 'Sol', pos: '4ª' },
+          { note: 'Lá', pos: '2ª' },
+          { note: 'Si', pos: '7ª' },
+          { note: 'Dó', pos: '6ª' },
+          { note: 'Ré', pos: '4ª' },
+          { note: 'Mi', pos: '2ª' },
+          { note: 'Fá#', pos: '2ª' },
+          { note: 'Sol', pos: '4ª' },
+        ],
+      },
+      d: {
+        title: 'Ré maior',
+        description: 'Ré maior — mapeamento conservador.',
+        rows: [
+          { label: 'Ré', note: 'Ré', pos: '4ª' },
+          { label: 'Mi', note: 'Mi', pos: '2ª' },
+          { label: 'Fá#', note: 'Fá#', pos: '2ª' },
+          { label: 'Sol', note: 'Sol', pos: '4ª' },
+          { label: 'Lá', note: 'Lá', pos: '2ª' },
+          { label: 'Si', note: 'Si', pos: '7ª' },
+          { label: 'Dó#', note: 'Dó#', pos: '6ª' },
+        ],
+        path: [
+          { note: 'Ré', pos: '4ª' },
+          { note: 'Mi', pos: '2ª' },
+          { note: 'Fá#', pos: '2ª' },
+          { note: 'Sol', pos: '4ª' },
+          { note: 'Lá', pos: '2ª' },
+          { note: 'Si', pos: '7ª' },
+          { note: 'Dó#', pos: '6ª' },
+          { note: 'Ré', pos: '4ª' },
+        ],
+      },
+      a: {
+        title: 'Lá maior',
+        description: 'Lá maior — mapeamento conservador.',
+        rows: [
+          { label: 'Lá', note: 'Lá', pos: '2ª' },
+          { label: 'Si', note: 'Si', pos: '7ª' },
+          { label: 'Dó#', note: 'Dó#', pos: '6ª' },
+          { label: 'Ré', note: 'Ré', pos: '4ª' },
+          { label: 'Mi', note: 'Mi', pos: '2ª' },
+          { label: 'Fá#', note: 'Fá#', pos: '2ª' },
+          { label: 'Sol#', note: 'Sol#', pos: '4ª' },
+        ],
+        path: [
+          { note: 'Lá', pos: '2ª' },
+          { note: 'Si', pos: '7ª' },
+          { note: 'Dó#', pos: '6ª' },
+          { note: 'Ré', pos: '4ª' },
+          { note: 'Mi', pos: '2ª' },
+          { note: 'Fá#', pos: '2ª' },
+          { note: 'Sol#', pos: '4ª' },
+          { note: 'Lá', pos: '2ª' },
+        ],
+      },
+      e: {
+        title: 'Mi maior',
+        description: 'Mi maior — mapeamento conservador.',
+        rows: [
+          { label: 'Mi', note: 'Mi', pos: '2ª' },
+          { label: 'Fá#', note: 'Fá#', pos: '2ª' },
+          { label: 'Sol#', note: 'Sol#', pos: '4ª' },
+          { label: 'Lá', note: 'Lá', pos: '2ª' },
+          { label: 'Si', note: 'Si', pos: '7ª' },
+          { label: 'Dó#', note: 'Dó#', pos: '6ª' },
+          { label: 'Ré#', note: 'Ré#', pos: '4ª' },
+        ],
+        path: [
+          { note: 'Mi', pos: '2ª' },
+          { note: 'Fá#', pos: '2ª' },
+          { note: 'Sol#', pos: '4ª' },
+          { note: 'Lá', pos: '2ª' },
+          { note: 'Si', pos: '7ª' },
+          { note: 'Dó#', pos: '6ª' },
+          { note: 'Ré#', pos: '4ª' },
+          { note: 'Mi', pos: '2ª' },
+        ],
+      },
+      b: {
+        title: 'Si maior',
+        description: 'Si maior — Si na 7ª posição; C# na 6ª, D# na 4ª, E na 2ª, F# na 1ª, G# na 4ª, A# na 2ª e volta ao Si na 7ª.',
+        rows: [
+          { label: 'Si', note: 'Si', pos: '7ª' },
+          { label: 'Dó#', note: 'Dó#', pos: '6ª' },
+          { label: 'Ré#', note: 'Ré#', pos: '4ª' },
+          { label: 'Mi', note: 'Mi', pos: '2ª' },
+          { label: 'Fá#', note: 'Fá#', pos: '1ª' },
+          { label: 'Sol#', note: 'Sol#', pos: '4ª' },
+          { label: 'Lá#', note: 'Lá#', pos: '2ª' },
+        ],
+        path: [
+          { note: 'Si', pos: '7ª' },
+          { note: 'Dó#', pos: '6ª' },
+          { note: 'Ré#', pos: '4ª' },
+          { note: 'Mi', pos: '2ª' },
+          { note: 'Fá#', pos: '1ª' },
+          { note: 'Sol#', pos: '4ª' },
+          { note: 'Lá#', pos: '2ª' },
+          { note: 'Si', pos: '7ª' },
+        ],
+      },
+      fsharp: {
+        title: 'Fá# maior',
+        description: 'Fá# maior — mapeamento conservador (encerra as tonalidades com sustenidos).',
+        rows: [
+          { label: 'Fá#', note: 'Fá#', pos: '2ª' },
+          { label: 'Sol#', note: 'Sol#', pos: '4ª' },
+          { label: 'Lá#', note: 'Lá#', pos: '2ª' },
+          { label: 'Si', note: 'Si', pos: '7ª' },
+          { label: 'Dó#', note: 'Dó#', pos: '6ª' },
+          { label: 'Ré#', note: 'Ré#', pos: '4ª' },
+          { label: 'Mi#', note: 'Mi#', pos: '2ª' },
+        ],
+        path: [
+          { note: 'Fá#', pos: '2ª' },
+          { note: 'Sol#', pos: '4ª' },
+          { note: 'Lá#', pos: '2ª' },
+          { note: 'Si', pos: '7ª' },
+          { note: 'Dó#', pos: '6ª' },
+          { note: 'Ré#', pos: '4ª' },
+          { note: 'Mi#', pos: '2ª' },
+          { note: 'Fá#', pos: '2ª' },
+        ],
+      },
+      eb: {
+        title: 'Mi bemol maior',
+        description: 'Mi bemol maior — mapeamento conservador.',
+        rows: [
+          { label: 'Mi bemol', note: 'Mi bemol', pos: '3ª' },
+          { label: 'Fá', note: 'Fá', pos: '1ª' },
+          { label: 'Sol', note: 'Sol', pos: '4ª' },
+          { label: 'Lá bemol', note: 'Lá bemol', pos: '2ª' },
+          { label: 'Si bemol', note: 'Si bemol', pos: '1ª' },
+          { label: 'Dó', note: 'Dó', pos: '6ª' },
+          { label: 'Ré', note: 'Ré', pos: '4ª' },
+        ],
+        path: [
+          { note: 'Mi bemol', pos: '3ª' },
+          { note: 'Fá', pos: '1ª' },
+          { note: 'Sol', pos: '4ª' },
+          { note: 'Lá bemol', pos: '2ª' },
+          { note: 'Si bemol', pos: '1ª' },
+          { note: 'Dó', pos: '6ª' },
+          { note: 'Ré', pos: '4ª' },
+          { note: 'Mi bemol', pos: '3ª' },
+        ],
+      },
+      ab: {
+        title: 'Lá bemol maior',
+        description: 'Lá bemol maior — mapeamento conservador.',
+        rows: [
+          { label: 'Lá bemol', note: 'Lá bemol', pos: '2ª' },
+          { label: 'Si bemol', note: 'Si bemol', pos: '1ª' },
+          { label: 'Dó', note: 'Dó', pos: '6ª' },
+          { label: 'Ré bemol', note: 'Ré bemol', pos: '4ª' },
+          { label: 'Mi bemol', note: 'Mi bemol', pos: '3ª' },
+          { label: 'Fá', note: 'Fá', pos: '1ª' },
+          { label: 'Sol', note: 'Sol', pos: '4ª' },
+        ],
+        path: [
+          { note: 'Lá bemol', pos: '2ª' },
+          { note: 'Si bemol', pos: '1ª' },
+          { note: 'Dó', pos: '6ª' },
+          { note: 'Ré bemol', pos: '4ª' },
+          { note: 'Mi bemol', pos: '3ª' },
+          { note: 'Fá', pos: '1ª' },
+          { note: 'Sol', pos: '4ª' },
+          { note: 'Lá bemol', pos: '2ª' },
+        ],
+      },
+      db: {
+        title: 'Ré bemol maior',
+        description: 'Ré bemol (Db) maior — mapeamento conservador.',
+        rows: [
+          { label: 'Ré bemol', note: 'Ré bemol', pos: '4ª' },
+          { label: 'Mi bemol', note: 'Mi bemol', pos: '3ª' },
+          { label: 'Fá', note: 'Fá', pos: '1ª' },
+          { label: 'Sol bemol', note: 'Sol bemol', pos: '4ª' },
+          { label: 'Lá bemol', note: 'Lá bemol', pos: '2ª' },
+          { label: 'Si bemol', note: 'Si bemol', pos: '1ª' },
+          { label: 'Dó', note: 'Dó', pos: '6ª' },
+        ],
+        path: [
+          { note: 'Ré bemol', pos: '4ª' },
+          { note: 'Mi bemol', pos: '3ª' },
+          { note: 'Fá', pos: '1ª' },
+          { note: 'Sol bemol', pos: '4ª' },
+          { note: 'Lá bemol', pos: '2ª' },
+          { note: 'Si bemol', pos: '1ª' },
+          { note: 'Dó', pos: '6ª' },
+          { note: 'Ré bemol', pos: '4ª' },
+        ],
+      },
+    };
+
+    let currentScaleKey = 'c';
+
+    const challengeList = [
+      'Toque a escala de Si bemol maior em semínimas, dizendo em voz alta o nome de cada nota antes de tocar.',
+      'Faça 3 repetições lentas da escala e pare 5 segundos em cada nota-alvo para sentir a posição.',
+      'Marque no celular um lembrete de 10 minutos: leitura rítmica, depois 5 minutos de trombone livre.',
+      'Toque apenas metade da escala e volte, prestando atenção na direção da vara.',
+      'Leia uma linha curta da partitura e converta cada nota em posição do trombone antes de tocar.'
+    ];
+
+    let timerId = null;
+    let totalSeconds = 600;
+    let remainingSeconds = totalSeconds;
+    let running = false;
+    let metronomeTimerId = null;
+    let audioContext = null;
+
+    function applyAppearance(theme, highContrast) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-contrast', highContrast ? 'high' : 'normal');
+      try {
+        localStorage.setItem('trombone-theme', theme);
+        localStorage.setItem('trombone-contrast', highContrast ? 'high' : 'normal');
+      } catch (e) {}
+    }
+
+    function setupAppearanceControls() {
+      let storedTheme = 'light';
+      let storedContrast = 'normal';
+      try {
+        storedTheme = localStorage.getItem('trombone-theme') || 'light';
+        storedContrast = localStorage.getItem('trombone-contrast') || 'normal';
+      } catch (e) {}
+
+      themeSelect.value = storedTheme;
+      contrastToggle.checked = storedContrast === 'high';
+      applyAppearance(themeSelect.value, contrastToggle.checked);
+
+      themeSelect.addEventListener('change', () => {
+        applyAppearance(themeSelect.value, contrastToggle.checked);
+      });
+
+      contrastToggle.addEventListener('change', () => {
+        applyAppearance(themeSelect.value, contrastToggle.checked);
+      });
+    }
+
+    function getCurrentScale() {
+      return scales[currentScaleKey];
+    }
+
+    function formatTime(seconds) {
+      const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const secs = String(seconds % 60).padStart(2, '0');
+      return `${mins}:${secs}`;
+    }
+
+    function normalizeNoteName(note) {
+      return (note || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function getNotePitch(note) {
+      const normalized = normalizeNoteName(note)
+        .replace(' sustenido', '#')
+        .replace('  #', '#');
+      return notePitchMap[normalized] || 'C';
+    }
+
+    function getNoteColor(note) {
+      return pitchColorMap[getNotePitch(note)] || '#2ca25f';
+    }
+
+    function getFunctionKeyByIndex(rowIndex) {
+      return degreeFunctionMap[rowIndex] || 'neutra';
+    }
+
+    function getFunctionColor(rowIndex) {
+      return functionColorMap[getFunctionKeyByIndex(rowIndex)] || 'var(--fn-neutra)';
+    }
+
+    function getFunctionLabel(rowIndex) {
+      return functionLabelMap[getFunctionKeyByIndex(rowIndex)] || 'Grau';
+    }
+
+    function getFunctionIconClass(rowIndex) {
+      return functionIconMap[getFunctionKeyByIndex(rowIndex)] || 'fn-circle';
+    }
+
+    function renderLegend() {
+      if (!noteLegend) return;
+      const currentScale = getCurrentScale();
+      const unique = new Map();
+      currentScale.rows.forEach((row) => {
+        const pitch = getNotePitch(row.note || row.label);
+        if (!unique.has(pitch)) {
+          unique.set(pitch, row.note || row.label);
+        }
+      });
+
+      noteLegend.innerHTML = '';
+      unique.forEach((noteLabel, pitch) => {
+        const chip = document.createElement('div');
+        chip.className = 'legend-chip';
+        chip.innerHTML = `<span class="legend-dot" style="background:${pitchColorMap[pitch]}"></span><span>${noteLabel}</span>`;
+        noteLegend.appendChild(chip);
+      });
+
+      if (!functionLegend) return;
+      functionLegend.innerHTML = '';
+      ['tonica', 'terca', 'quinta', 'sensivel'].forEach((fnKey) => {
+        const chip = document.createElement('div');
+        chip.className = 'legend-chip function';
+        chip.style.borderLeftColor = functionColorMap[fnKey];
+        chip.style.color = functionColorMap[fnKey];
+        chip.innerHTML = `<span class="fn-icon ${functionIconMap[fnKey]}" aria-hidden="true"></span><span>${functionLabelMap[fnKey]}</span>`;
+        functionLegend.appendChild(chip);
+      });
+    }
+
+    function ensureAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      return audioContext;
+    }
+
+    function playClick(frequency = 1200, duration = 0.06, volume = 0.15) {
+      const context = ensureAudioContext();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+
+      oscillator.type = 'square';
+      oscillator.frequency.value = frequency;
+      gain.gain.value = volume;
+
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start();
+      gain.gain.setValueAtTime(volume, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + duration);
+      oscillator.stop(context.currentTime + duration);
+    }
+
+    function flashBeat() {
+      beatLight.classList.add('active');
+      window.setTimeout(() => beatLight.classList.remove('active'), 120);
+    }
+
+    function updateScaleHeader() {
+      const currentScale = getCurrentScale();
+      mapTitle.textContent = `Mapa da escala de ${currentScale.title}`;
+      scaleNote.innerHTML = `<strong>Observação do trombone</strong>${currentScale.description} A mesma posição pode receber notas diferentes conforme a embocadura, o sopro e a parcial. Na 4ª posição, por exemplo, podem aparecer Sol e Ré em registros diferentes. Por isso, este mapa mostra posição + registro, não só a posição.`;
+      if (currentScaleKey === 'b') {
+        scaleNote.innerHTML += ' A 7ª posição segue disponível como coluna própria para as passagens em que ela entra de verdade.';
+      }
+    }
+
+    function renderMap() {
+      const currentScale = getCurrentScale();
+      mapGrid.innerHTML = '';
+
+      columns.forEach((column, index) => {
+        const cell = document.createElement('div');
+        cell.className = 'cell head';
+        cell.textContent = column;
+        mapGrid.appendChild(cell);
+      });
+
+      currentScale.rows.forEach((row, rowIndex) => {
+        const rowColor = getNoteColor(row.note || row.label);
+        const functionColor = getFunctionColor(rowIndex);
+        const functionLabel = getFunctionLabel(rowIndex);
+        const functionIconClass = getFunctionIconClass(rowIndex);
+        const label = document.createElement('div');
+        label.className = 'cell row-label';
+        label.style.setProperty('--note-color', rowColor);
+        label.innerHTML = `<div class="note"><span class="row-swatch" style="background:${rowColor}"></span>${row.label}<span class="function-badge" style="border-left:3px solid ${functionColor};color:${functionColor}"><span class="fn-icon ${functionIconClass}" aria-hidden="true"></span><span>${functionLabel}</span></span></div><div class="pos">posição-alvo: ${row.pos}</div>`;
+        mapGrid.appendChild(label);
+
+        columns.slice(1).forEach((col) => {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.dataset.row = row.label;
+          cell.dataset.col = col;
+          cell.dataset.scale = currentScaleKey;
+
+          if (row.pos === col) {
+            const toneColor = getNoteColor(row.note || row.label);
+            const rowFunctionColor = getFunctionColor(rowIndex);
+            const rowFunctionIconClass = getFunctionIconClass(rowIndex);
+            cell.classList.add('highlight');
+            cell.classList.add('note-colored');
+            cell.classList.add('function-colored');
+            cell.style.setProperty('--note-color', toneColor);
+            cell.style.setProperty('--function-color', rowFunctionColor);
+            cell.innerHTML = `<div class="note"><span class="cell-function-icon" aria-hidden="true"><span class="fn-icon ${rowFunctionIconClass}"></span></span>${row.note}</div><div class="pos">${row.pos}</div>`;
+          } else {
+            cell.innerHTML = '<div class="note">·</div><div class="pos"> </div>';
+          }
+
+          // placeholder for alternatives
+          const altWrap = document.createElement('div');
+          altWrap.className = 'alt-wrap';
+          cell.appendChild(altWrap);
+
+          cell.addEventListener('click', (e) => {
+            // add alternative via exposed function or prompt
+            const rowLabel = cell.dataset.row;
+            const colPos = cell.dataset.col;
+            const pick = prompt(`Adicionar alternativa para ${rowLabel} em ${colPos} (ex: "Fá - 1ª"): deixe vazio para cancelar`);
+            if (pick && pick.trim()) {
+              // expectativa: user types like 'Fá - 1ª' or just 'Fá'
+              addAlternative(currentScaleKey, rowLabel, colPos, pick.trim());
+            }
+          });
+
+          mapGrid.appendChild(cell);
+        });
+      });
+
+      // after grid rendered, fill alternatives if visible
+      renderLegend();
+      renderAlternatives();
+    }
+
+    // popula alternativas conservadoras para todas as escalas
+    function seedAlternatives() {
+      // regras refinadas: mapeamento baseado em harmônicos e posições comumente usadas
+      const altMap = {
+        '1ª': ['4ª', '6ª'],
+        '2ª': ['4ª', '1ª'],
+        '3ª': ['5ª', '7ª'],
+        '4ª': ['1ª', '6ª', '2ª'],
+        '5ª': ['3ª', '7ª'],
+        '6ª': ['1ª', '4ª'],
+        '7ª': ['3ª', '5ª']
+      };
+
+      // limpar existentes
+      Object.keys(alternatives).forEach(k => delete alternatives[k]);
+
+      Object.keys(scales).forEach((key) => {
+        const s = scales[key];
+        s.rows.forEach((r) => {
+          const primary = r.pos;
+          const mapped = altMap[primary] || ['1ª'];
+
+          mapped.forEach((ap) => {
+            // razão descritiva: indicar provável alteração de parcial/harmônico
+            const reason = (ap === '1ª' || ap === '4ª') ? 'parcial comum' : 'parcial alternativa';
+            const text = `${r.note} (alt ${ap}, ${reason})`;
+            addAlternative(key, r.label, ap, text);
+          });
+
+          // adicionar também a versão em oitava (quando aplicável)
+          if (primary === '6ª' || primary === '1ª') {
+            const octAlt = (primary === '6ª') ? '1ª' : '6ª';
+            addAlternative(key, r.label, octAlt, `${r.note} (alt ${octAlt}, oitava/harmônico)`);
+          }
+
+          if (key === 'b' && r.label === 'Si') {
+            addAlternative(key, r.label, '7ª', 'Si (alt 7ª, mesma nota na 7ª posição)');
+          }
+        });
+      });
+      // garantir exposição
+      try { window.alternatives = alternatives; } catch(e) {}
+    }
+
+    function clearHighlights() {
+      const cells = mapGrid.querySelectorAll('.cell');
+      cells.forEach((cell) => {
+        cell.classList.remove('highlight');
+        cell.style.opacity = '1';
+      });
+      renderMap();
+    }
+
+    function highlightPath() {
+      const currentScale = getCurrentScale();
+      const cells = mapGrid.querySelectorAll('.cell');
+      cells.forEach((cell) => {
+        cell.classList.remove('highlight');
+        cell.style.opacity = '1';
+      });
+
+      const bodyCells = [...cells].slice(8);
+      currentScale.path.forEach((step) => {
+        const rowIndex = currentScale.rows.findIndex((row) => row.label === step.note);
+        const colIndex = columns.indexOf(step.pos);
+        if (rowIndex >= 0 && colIndex >= 0) {
+          const targetIndex = rowIndex * columns.length + colIndex + columns.length;
+          const target = cells[targetIndex];
+          if (target) {
+            const toneColor = getNoteColor(step.note);
+            const rowFunctionColor = getFunctionColor(rowIndex);
+            const rowFunctionIconClass = getFunctionIconClass(rowIndex);
+            target.classList.add('highlight');
+            target.classList.add('note-colored');
+            target.classList.add('function-colored');
+            target.style.setProperty('--note-color', toneColor);
+            target.style.setProperty('--function-color', rowFunctionColor);
+            target.innerHTML = `<div class="note"><span class="cell-function-icon" aria-hidden="true"><span class="fn-icon ${rowFunctionIconClass}"></span></span>${step.note}</div><div class="pos">${step.pos}</div>`;
+          }
+        }
+      });
+
+      bodyCells.forEach((cell) => {
+        if (!cell.classList.contains('highlight') && cell.classList.contains('cell')) {
+          cell.style.opacity = '0.45';
+        }
+      });
+    }
+
+    // alternatives storage: scale -> rowLabel -> array of {pos, text}
+    const alternatives = {};
+
+    function addAlternative(scaleKey, rowLabel, pos, text) {
+      alternatives[scaleKey] = alternatives[scaleKey] || {};
+      alternatives[scaleKey][rowLabel] = alternatives[scaleKey][rowLabel] || [];
+      alternatives[scaleKey][rowLabel].push({ pos, text });
+      renderAlternatives();
+      // expose for console/tests
+      try { window.alternatives = alternatives; } catch(e) {}
+    }
+
+    function renderAlternatives() {
+      const show = showAltsToggle.checked;
+      const advanced = advancedToggle.checked;
+      const current = getCurrentScale();
+      const cells = mapGrid.querySelectorAll('.cell');
+      cells.forEach((cell) => {
+        const rowLabel = cell.dataset.row;
+        const col = cell.dataset.col;
+        const altWrap = cell.querySelector('.alt-wrap');
+        if (!altWrap) return;
+        altWrap.innerHTML = '';
+
+        if (show) {
+          // show alternatives defined for this row that match this col
+          const list = (alternatives[currentScaleKey] && alternatives[currentScaleKey][rowLabel]) || [];
+          list.filter(a => a.pos === col).forEach(a => {
+            const chip = document.createElement('div');
+            chip.className = 'alt-chip';
+            chip.textContent = a.text;
+            chip.style.borderLeftColor = getNoteColor(rowLabel);
+            altWrap.appendChild(chip);
+          });
+        }
+
+        if (advanced) {
+          // show any note from other rows that has an alternative pointing to this col
+          Object.keys(current.rows || {}).forEach(() => {});
+          const otherNotes = [];
+          const scaleAlts = alternatives[currentScaleKey] || {};
+          Object.keys(scaleAlts).forEach(r => {
+            scaleAlts[r].forEach(a => {
+              if (a.pos === col) otherNotes.push(`${r} → ${a.text}`);
+            });
+          });
+          otherNotes.forEach(t => {
+            const chip = document.createElement('div');
+            chip.className = 'alt-chip';
+            chip.textContent = t;
+            const src = t.split('→')[0].trim();
+            chip.style.borderLeftColor = getNoteColor(src);
+            altWrap.appendChild(chip);
+          });
+        }
+      });
+    }
+
+    function updateMetronomeLabel() {
+      bpmLabel.textContent = bpmInput.value;
+    }
+
+    function stopMetronome() {
+      if (metronomeTimerId) {
+        clearInterval(metronomeTimerId);
+        metronomeTimerId = null;
+      }
+      metronomeStatus.textContent = 'Metrônomo parado. Toque em iniciar para marcar a pulsação.';
+      beatLight.classList.remove('active');
+    }
+
+    function startMetronome() {
+      stopMetronome();
+      const bpm = Number(bpmInput.value);
+      const interval = Math.max(250, Math.round(60000 / bpm));
+      metronomeStatus.textContent = `Metrônomo ativo em ${bpm} BPM.`;
+      playClick(1200, 0.07, 0.18);
+      flashBeat();
+      metronomeTimerId = window.setInterval(() => {
+        playClick(1200, 0.06, 0.15);
+        flashBeat();
+      }, interval);
+    }
+
+    function playReferenceTone() {
+      const context = ensureAudioContext();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+
+      oscillator.type = 'sine';
+      oscillator.frequency.value = 233.08;
+      gain.gain.value = 0.12;
+
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start();
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 1.2);
+      oscillator.stop(context.currentTime + 1.2);
+    }
+
+    function resetMapStyles() {
+      const cells = mapGrid.querySelectorAll('.cell');
+      cells.forEach((cell) => {
+        cell.classList.remove('highlight');
+        cell.style.opacity = '1';
+      });
+      renderMap();
+    }
+
+    function setTime(seconds) {
+      totalSeconds = seconds;
+      remainingSeconds = seconds;
+      timeDisplay.textContent = formatTime(remainingSeconds);
+      bar.style.width = '0%';
+      running = false;
+      if (timerId) {
+        clearInterval(timerId);
+        timerId = null;
+      }
+    }
+
+    function tick() {
+      if (remainingSeconds <= 0) {
+        clearInterval(timerId);
+        timerId = null;
+        running = false;
+        timeDisplay.textContent = '00:00';
+        bar.style.width = '100%';
+        challengeText.textContent = 'Tempo finalizado. Faça uma repetição lenta da escala de Si bemol maior, sem olhar para a mão por 1 minuto.';
+        return;
+      }
+
+      remainingSeconds -= 1;
+      timeDisplay.textContent = formatTime(remainingSeconds);
+      const done = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
+      bar.style.width = `${done}%`;
+    }
+
+    scaleSelect.addEventListener('change', () => {
+      currentScaleKey = scaleSelect.value;
+      updateScaleHeader();
+      renderMap();
+    });
+
+    highlightBtn.addEventListener('click', highlightPath);
+    randomBtn.addEventListener('click', () => {
+      const pick = challengeList[Math.floor(Math.random() * challengeList.length)];
+      challengeText.textContent = pick;
+    });
+    resetBtn.addEventListener('click', resetMapStyles);
+
+    bpmInput.addEventListener('input', updateMetronomeLabel);
+    metroStartBtn.addEventListener('click', startMetronome);
+    metroStopBtn.addEventListener('click', stopMetronome);
+    testSoundBtn.addEventListener('click', playReferenceTone);
+
+    document.querySelectorAll('[data-minutes]').forEach((button) => {
+      button.addEventListener('click', () => {
+        setTime(Number(button.dataset.minutes) * 60);
+      });
+    });
+
+    startBtn.addEventListener('click', () => {
+      if (running) return;
+      running = true;
+      timerId = setInterval(tick, 1000);
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      if (timerId) {
+        clearInterval(timerId);
+        timerId = null;
+        running = false;
+        challengeText.textContent = 'Pausa feita. Retome com uma meta pequena: 1 escala, 1 leitura ou 1 trecho da orquestra.';
+      }
+    });
+
+    stopBtn.addEventListener('click', () => {
+      setTime(600);
+      challengeText.textContent = 'Sessão reiniciada. Comece pelo aquecimento e mantenha o estudo em blocos curtos.';
+    });
+
+    setupAppearanceControls();
+    updateMetronomeLabel();
+    updateScaleHeader();
+    seedAlternatives();
+    renderMap();
+    setTime(600);
+  </script>
+</body>
+</html>
