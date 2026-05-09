@@ -1,0 +1,30 @@
+# PDFs e documentos
+*.pdf
+
+# Imagens
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+
+# Arquivos de áudio (não versionar música)
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.flac
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Builds
+dist/
+build/
+node_modules/
