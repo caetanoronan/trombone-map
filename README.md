@@ -1,103 +1,82 @@
-# Mapa-Base do Trombone 🎺
+# Mapa-Base do Trombone
 
-Um mapa visual e interativo para estudo de escalas e posições no trombone, desenvolvido como ferramenta pedagógica para facilitar a prática diária.
+Mapa visual e interativo para estudo de escalas, posições da vara, registro e rotina de prática no trombone.
 
-## Características
+O projeto foi pensado como uma ferramenta pedagógica simples de abrir no navegador, com duas páginas principais:
 
-✨ **Interativo**: Selecione escalas e veja o caminho destacado no mapa.  
-🎵 **Escalas Maiores**: Todas as tonalidades com posições e registros específicos do trombone.  
-⏱️ **Timer e Metrônomo**: Ferramentas integradas para sessões de estudo focadas.  
-📋 **Checklist e Desafio**: Acompanhamento diário de progresso.  
-🌓 **Tema Escuro/Claro**: Interface adaptável com alto contraste.  
-📱 **Responsivo**: Otimizado para celular, tablet e desktop.  
+- `index.html`: mapa-base interativo para estudo diário.
+- `relatorio.html`: relatório pedagógico com abas, imagens de referência e explicações complementares.
 
-## Estrutura do Projeto
+## Estado Atual
 
-```
-Musicas_para_brincar/
-├── index.html        # Mapa interativo principal
-├── relatorio.html    # Documentação e guias pedagógicos
-├── README.md         # Este arquivo
-└── .gitignore        # Exceções para versionamento
-```
+Estas alterações estão preparadas para validação antes da publicação no repositório:
 
-## Como Usar
+- Layout visual alinhado ao Hub de Produtos Musicais.
+- Fundo musical colorido com tema claro/escuro.
+- Controle de tema dentro das ações do título.
+- Mapa de escalas com destaque de caminho e alternativas.
+- Imagem de apoio abaixo do mapa das escalas.
+- Relatório com abas para visão geral, escalas, vara, partes do trombone, posições, dicas e integração.
+- Imagens do relatório clicáveis, abrindo em outra aba para facilitar o zoom pelo navegador.
+- Página responsiva para celular, tablet e desktop.
 
-### Localmente
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/trombone-map.git
-   ```
+## Como Usar Localmente
+
+1. Abra a pasta do projeto.
 2. Abra `index.html` no navegador.
-
-### Publicado no GitHub Pages
-Acesse: `https://seu-usuario.github.io/trombone-map`
+3. Use `relatorio.html` para consultar o material de apoio.
 
 ## Navegação
 
-- **Mapa-Base** (`index.html`): Interface principal com escala selecionável, timer, metrônomo e checklist.
-- **Relatório** (`relatorio.html`): Documentação, guia da vara, tabela de posições e escalas descritivas.
+- **Mapa-base**: seleção de escalas, mapa de posições, alternativas, timer, metrônomo e desafios curtos.
+- **Relatório**: documentação pedagógica, imagens de referência, tabela de posições e explicação do fluxo de estudo.
 
-## Metodologia de Estudo
+## Recursos do Mapa
 
-O mapa reflete a prática real do trombone de vara:
+- Seletor de escalas maiores.
+- Destaque automático do caminho da escala.
+- Legenda de notas por cor.
+- Legenda de função harmônica.
+- Alternativas de posição.
+- Timer de foco.
+- Metrônomo com Web Audio.
+- Checklist de estudo.
+- Imagem clicável de referência das posições da vara.
 
-- **Si natural em 7ª posição**: Todas as escalas que contêm Si natural (C, G, D, A, E, F#, B major) mostram Si destacado em 7ª posição, conforme a metodologia de ensino estudada.
-- **Posições de referência**: Cada nota tem uma posição primária e alternativas harmônicas sugeridas.
-- **Estudo em blocos curtos**: Timer integrado para sessões de 10–15 minutos focadas.
+## Recursos do Relatório
 
-## Paleta de Cores (BuGn)
+- Aba de visão geral.
+- Aba de escalas, incluindo imagem da escala de Si bemol.
+- Aba da vara do trombone com imagem de posicionamento.
+- Aba de partes do trombone com imagens de tipos e partes.
+- Aba de posições com tabela e GIF de referência.
+- Aba de dicas práticas.
+- Aba de integração futura.
 
-As notas são coloridas conforme sua altura (pitch):
-- Azuis escuros para notas graves
-- Verdes para notas médias
-- Verdes claros para notas agudas
+## Publicação
 
-As funções harmônicas (tônica, terça, quinta, sensível) têm cores e ícones distintivos.
+Quando a validação visual estiver concluída, o projeto pode ser enviado ao repositório e publicado via GitHub Pages.
 
-## Funcionalidades
+Checklist antes do envio:
 
-### Mapa Interativo
-- Seletor de escalas maiores (Dó a Si)
-- Destaque automático do caminho da escala
-- Alternativas harmônicas com camada avançada
-- Clique em células para adicionar alternativas personalizadas
-
-### Ferramentas de Estudo
-- **Metrônomo**: Selecione BPM e reproduza cliques sonoros
-- **Timer**: Configure duração de sessão (padrão 10 min)
-- **Checklist**: Acompanhe notas estudadas
-- **Desafio**: Proposta de foco para cada sessão
-
-### Acessibilidade
-- Tema claro/escuro com persistência local
-- Alto contraste para melhor legibilidade
-- Legendas de funções harmônicas
-- Suporte a navegação por teclado
+- Abrir `index.html` e validar o mapa.
+- Abrir `relatorio.html` e testar todas as abas.
+- Clicar nas imagens para confirmar abertura em nova aba.
+- Testar tema claro e escuro.
+- Testar em largura de celular.
 
 ## Tecnologia
 
-- **HTML5** + **CSS3 Grid**: Layout responsivo sem dependências externas
-- **Vanilla JavaScript**: Lógica de interação e estado local (localStorage)
-- **Web Audio API**: Metrônomo e referência sonora
-- **Sem frameworks**: Código leve e rápido para celular
-
-## Deployment no GitHub Pages
-
-1. **Clone ou faça fork** deste repositório
-2. **Vá para Settings > Pages** (no GitHub)
-3. **Selecione "Deploy from a branch"** com branch `main`
-4. Acesse a URL fornecida após alguns minutos
-
-## Contribuições
-
-Sugestões de escalas, posições alternativas ou melhorias pedagógicas são bem-vindas! Abra uma *issue* ou *pull request*.
+- HTML5.
+- CSS responsivo com Grid/Flexbox.
+- JavaScript sem frameworks.
+- Web Audio API para metrônomo.
+- Armazenamento local para preferência de tema.
 
 ## Licença
 
-Aberto para uso educacional e pessoal.
+Uso educacional e pessoal.
 
 ---
 
-**Desenvolvido** para estudantes e professores de trombone de vara.  
-**Última atualização**: Maio de 2026
+Última atualização: Maio de 2026.
