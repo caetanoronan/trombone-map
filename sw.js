@@ -1,9 +1,15 @@
-const CACHE_NAME = 'trombone-map-v1';
+const CACHE_NAME = 'trombone-map-v2';
 const APP_SHELL = [
   './',
   './index.html',
   './relatorio.html',
   './manifest.webmanifest',
+  './Trambone_slide_positioning_chart_2.jpg',
+  './Trambone_slide_positioning_chart.jpg',
+  './Scala_Bb_trombone.jpg',
+  './Types_trombone.jpg',
+  './Partes_trombone.jpg',
+  './trombone_position_chart.gif',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon.svg',
@@ -38,18 +44,18 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    caches.match(request).then((cachedResponse) => {
+    fetch(request)
+      .then((networkResponse) => {
+        const copy = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+        return networkResponse;
+      })
+      .catch(() => caches.match(request))
+      .then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
-
-      return fetch(request)
-        .then((networkResponse) => {
-          const copy = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-          return networkResponse;
-        })
-        .catch(() => caches.match('./index.html'));
+      return caches.match('./index.html');
     })
   );
 });
